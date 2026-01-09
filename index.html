@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise 🎉</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* Reset & global */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at top left, #6a11cb, #2575fc);
+    overflow: hidden;
+    padding: 10px;
+  }
+
+  /* Floating sparkles */
+  .sparkle {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: float 5s linear infinite;
+  }
+  @keyframes float {
+    0% { transform: translateY(0) translateX(0); opacity: 0.8; }
+    50% { transform: translateY(-200px) translateX(50px); opacity: 0.4; }
+    100% { transform: translateY(-400px) translateX(-50px); opacity: 0; }
+  }
+
+  /* Container */
+  .container {
+    background: rgba(0,0,0,0.3);
+    padding: clamp(20px, 5vw, 40px);
+    border-radius: 20px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(255,255,255,0.3);
+    backdrop-filter: blur(15px);
+    animation: floatContainer 4s ease-in-out infinite alternate;
+  }
+  @keyframes floatContainer { 0% { transform: translateY(0); } 100% { transform: translateY(-10px); } }
+
+  h1 {
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(2rem, 6vw, 3rem);
+    margin-bottom: 10px;
+    color: #ffd700;
+    text-shadow: 0 0 15px #fffa77aa, 0 0 30px #fff5aa55;
+    animation: glow 3s ease-in-out infinite alternate;
+  }
+  @keyframes glow {
+    0% { text-shadow: 0 0 15px #fffa77aa, 0 0 30px #fff5aa55; }
+    50% { text-shadow: 0 0 25px #fffacdaa, 0 0 50px #fff5aa77; }
+    100% { text-shadow: 0 0 15px #fffa77aa, 0 0 30px #fff5aa55; }
+  }
+
+  p { font-size: clamp(1rem, 3vw, 1.2rem); color: #fff; margin-bottom: 20px; }
+
+  input {
+    padding: 12px;
+    width: 100%;
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    outline: none;
+  }
+
+  button {
+    padding: 12px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 12px;
+    background: #ff4d6d;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 250px;
+    box-shadow: 0 4px 15px rgba(255,77,109,0.5);
+  }
+  button:hover {
+    background: #ff1a40;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #ff4d6daa, 0 0 40px #ff1a40aa;
+  }
+
+  /* Notifications */
+  #notificationsContainer {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+  }
+  .notification {
+    background: rgba(255,255,255,0.95);
+    color: #333;
+    padding: 12px 18px;
+    border-radius: 15px;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(-20px) scale(0.9);
+    transition: all 0.5s ease;
+    cursor: pointer;
+  }
+  .notification.show { opacity: 1; transform: translateY(0) scale(1); }
+
+  /* Oops container */
+  .oops-container {
+    text-align: center;
+    padding: clamp(20px, 5vw, 40px);
+    animation: floatUp 1s ease-out;
+    color: #fff;
+  }
+  .oops-container h1 { font-size: clamp(2rem, 6vw, 3rem); margin-bottom: 20px; color: #ffd700; text-shadow: 0 0 12px #fffa77aa, 0 0 20px #fff5aa55; animation: glow 3s ease-in-out infinite alternate; }
+  .oops-container p { font-size: clamp(1rem, 3vw, 1.2rem); margin-bottom: 10px; }
+  .oops-container button { margin-top: 20px; width: 100%; max-width: 200px; }
+
+  @keyframes floatUp { 0% { transform: translateY(20px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+
+  /* Responsive tweaks */
+  @media (max-width: 500px) {
+    .container, .oops-container { padding: 15px; border-radius: 15px; }
+    button { font-size: 14px; padding: 10px; }
+    h1 { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container" id="nameContainer">
+  <h1>Hey there! 🎉</h1>
+  <p>May I know your name, my special friend? ✨</p>
+  <input type="text" id="nameInput" placeholder="Enter your name">
+  <button id="submitBtn">Let's Go!</button>
+</div>
+
+<div id="notificationsContainer"></div>
+
+<script>
+const allowedNames = ["Kaju", "John", "Alice", "Sam", "Lina"];
+const messages = [
+  "Please enter your name ✨",
+  "Hello there! Would you mind telling me your name? 😊",
+  "Pretty please, tell me your name 💖",
+  "Don't leave me guessing! Your name, please 😅",
+  "Oops, did you forget your name? 😜",
+  "You’re keeping me curious… your name, pretty please! 🎀"
+];
+
+let clickCount = 0;
+const submitBtn = document.getElementById("submitBtn");
+const nameInput = document.getElementById("nameInput");
+const notificationsContainer = document.getElementById("notificationsContainer");
+
+function showNotification(msg, duration = 10000) {
+  const notif = document.createElement("div");
+  notif.className = "notification";
+  notif.textContent = msg;
+  notificationsContainer.appendChild(notif);
+  setTimeout(() => notif.classList.add("show"), 50);
+  notif.addEventListener("click", () => removeNotification(notif));
+  setTimeout(() => removeNotification(notif), duration);
+  function removeNotification(n) { n.classList.remove("show"); setTimeout(() => n.remove(), 500); }
+}
+
+function createConfetti() {
+  for (let i = 0; i < 100; i++) {
+    const conf = document.createElement("div");
+    conf.className = "sparkle";
+    conf.style.left = Math.random() * window.innerWidth + "px";
+    conf.style.animationDuration = (2 + Math.random()*3) + "s";
+    document.body.appendChild(conf);
+    setTimeout(() => conf.remove(), 10000);
+  }
+}
+
+function checkName() {
+  const name = nameInput.value.trim();
+  if (name && allowedNames.includes(name)) {
+    createConfetti();
+    setTimeout(() => window.location.href = "birthday.html", 1500);
+    return;
+  }
+  if (!name) {
+    showNotification(messages[clickCount] || "Please, just tell me your name 😄");
+    clickCount++;
+  } else {
+    document.body.innerHTML = `
+      <div class="oops-container">
+        <h1>Oops! 🤔</h1>
+        <p>Hmm… it seems the person who sent you this doesn’t know you yet.</p>
+        <p>Maybe let them know first, then come back! 😉</p>
+        <button onclick="location.reload()">Try Again</button>
+      </div>
+    `;
+  }
+}
+
+submitBtn.addEventListener("click", checkName);
+nameInput.addEventListener("keydown", e => { if (e.key === "Enter") checkName(); });
+nameInput.focus();
+</script>
+
+</body>
+</html>
