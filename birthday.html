@@ -6,230 +6,7 @@
   <title>Happy Birthday 🎉</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg1: #0d0f1a;
-      --bg2: #1a1f36;
-      --accent: #ff4d6d; /* pink accent */
-      --pink: #ff4d6d;
-      --white: #f7f7ff;
-    }
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: radial-gradient(1200px 800px at 70% 30%, var(--bg2), var(--bg1));
-      color: var(--white);
-      font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      overflow-x: hidden;
-      position: relative;
-    }
-    .stars {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      background-image:
-        radial-gradient(2px 2px at 20% 10%, #ffffff55, #0000 60%),
-        radial-gradient(2px 2px at 80% 30%, #ffffff33, #0000 60%),
-        radial-gradient(2px 2px at 40% 70%, #ffffff66, #0000 60%),
-        radial-gradient(1px 1px at 60% 50%, #ffffff22, #0000 60%);
-      animation: twinkle 6s ease-in-out infinite alternate;
-    }
-    @keyframes twinkle {
-      to {
-        filter: brightness(1.4);
-      }
-    }
-    header {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 16px 8px;
-      text-align: center;
-    }
-    .title {
-      font-family: "Great Vibes", cursive;
-      font-size: clamp(40px, 6vw, 92px);
-      line-height: 1.05;
-      color: var(--pink);
-      text-shadow:
-        0 0 12px #ff4d6d99,
-        0 0 28px #ff4d6d77,
-        0 0 60px #ff4d6d55;
-      animation: glow 3.5s ease-in-out infinite;
-    }
-    @keyframes glow {
-      0%, 100% {
-        filter: drop-shadow(0 0 0 var(--pink));
-        transform: translateY(0);
-      }
-      50% {
-        filter: drop-shadow(0 0 6px #ff4d6daa);
-        transform: translateY(-2px);
-      }
-    }
-    .subtitle {
-      margin-top: 10px;
-      font-size: clamp(16px, 2.4vw, 24px);
-      color: #dfe6ff;
-      opacity: 0.9;
-    }
-    .card {
-      position: relative;
-      z-index: 2;
-      max-width: 940px;
-      margin: 24px auto;
-      padding: 24px;
-      display: grid;
-      gap: 20px;
-    }
-    .panel {
-      background: linear-gradient(135deg, #1e243d 0%, #161a2c 100%);
-      border: 1px solid #2b3358;
-      border-radius: 18px;
-      padding: clamp(18px, 3.2vw, 28px);
-      box-shadow: 0 12px 40px #00000055, inset 0 0 20px #ffffff08;
-    }
-    .hero-emoji {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
-      font-size: clamp(28px, 4.5vw, 56px);
-      filter: drop-shadow(0 4px 10px #00000066);
-      animation: float 4s ease-in-out infinite;
-    }
-    @keyframes float {
-      50% {
-        transform: translateY(-6px);
-      }
-    }
-    .wish {
-      font-size: clamp(18px, 2.2vw, 22px);
-      line-height: 1.6;
-      color: #eaf0ff;
-    }
-    .wish strong {
-      color: var(--pink);
-    }
-    .countdown {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(110px, 1fr));
-      gap: 14px;
-      margin-top: 6px;
-    }
-    .timebox {
-      background: #0f1324;
-      border: 1px solid #2b3358;
-      border-radius: 14px;
-      padding: 16px;
-      text-align: center;
-    }
-    .timebox .num {
-      font-size: clamp(28px, 4vw, 42px);
-      font-weight: 700;
-      color: var(--pink);
-      text-shadow: 0 0 12px #ff4d6d44;
-    }
-    .timebox .lab {
-      margin-top: 4px;
-      font-size: 13px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: #b8c3ff;
-    }
-    .footer {
-      text-align: center;
-      color: #cbd6ff;
-      font-size: 14px;
-      opacity: 0.9;
-    }
-
-    /* Confetti container */
-    #confetti {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 1;
-      overflow: visible;
-    }
-    .confetti-piece {
-      position: absolute;
-      width: 10px;
-      height: 18px;
-      border-radius: 3px;
-      opacity: 0.9;
-      will-change: transform, opacity;
-    }
-    @keyframes fall {
-      0% {
-        transform: translateY(-10vh) rotate(var(--rot));
-        opacity: 0;
-      }
-      10% {
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(110vh) rotate(calc(var(--rot) + 360deg));
-        opacity: 0.8;
-      }
-    }
-
-    /* Mobile */
-    @media (max-width: 560px) {
-      .countdown {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    /* Celebration emojis container */
-    #celebration {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 10;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end; /* start from bottom */
-      gap: 24px;
-      flex-wrap: wrap;
-      font-size: clamp(48px, 10vw, 96px);
-      color: #fff;
-      text-shadow: 0 0 10px #ff4d6d, 0 0 20px #ff4d6d99;
-      user-select: none;
-      opacity: 0;
-      visibility: hidden;
-    }
-
-    #celebration span {
-      display: inline-block;
-      animation: floatUp 5s linear infinite;
-      will-change: transform, opacity;
-      --sway: 0;
-    }
-
-    @keyframes floatUp {
-      0% {
-        transform: translateY(100vh) translateX(0) rotate(0deg);
-        opacity: 0;
-      }
-      10% {
-        opacity: 1;
-      }
-      90% {
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-10vh) translateX(var(--sway)) rotate(360deg);
-        opacity: 0;
-      }
-    }
-  </style>
+ <link rel="stylesheet" href="birthday.css" />
 </head>
 <body>
   <div class="stars"></div>
@@ -245,13 +22,10 @@
   <main class="card">
     <section class="panel">
       <div class="hero-emoji">🎉 🎂 ✨ 💖 🎁 🌸 🌟 </div>
-      <p class="wish">
-        <strong>Dear Kaju,</strong><br />
-        Even though I’m far away, my heart is right there celebrating you today.
-        May your day shimmer with joy, laughter, and little surprises that make you smile.
-        Here’s a sparkle-filled wish, just for you ✨
-      </p>
-      <div class="signature">From someone who’s thinking of you, always 💫</div>
+      <p class="dear" id="dear-text"></p>
+      <p class="wish" id="wish-text"></p>
+<div class="signature" id="signature-text"></div>
+
     </section>
 
     <section class="panel">
@@ -295,183 +69,217 @@
   </main>
 
   <script>
-    // Countdown logic (UTC-based)
-    async function getAccurateUTC() {
+  // ===============================
+  // GLOBAL STATE
+  // ===============================
+  let targetUTC = null;
+  let countdownInterval = null;
+  let celebrationTimeout = null;
+
+  // ===============================
+  // TIME (UTC) LOGIC
+  // ===============================
+  async function getAccurateUTC() {
+    try {
+      const res = await fetch("https://worldtimeapi.org/api/timezone/Etc/UTC");
+      const json = await res.json();
+      return new Date(json.utc_datetime);
+    } catch (e1) {
       try {
-        let res = await fetch("https://worldtimeapi.org/api/timezone/Etc/UTC");
-        let json = await res.json();
-        return new Date(json.utc_datetime);
-      } catch (e1) {
-        try {
-          let res2 = await fetch("https://timeapi.io/api/Time/current/zone?timeZone=UTC");
-          let json2 = await res2.json();
-          return new Date(json2.dateTime);
-        } catch (e2) {
-          console.warn("Both time APIs failed, using device time fallback.");
-          return new Date();
-        }
+        const res2 = await fetch("https://timeapi.io/api/Time/current/zone?timeZone=UTC");
+        const json2 = await res2.json();
+        return new Date(json2.dateTime);
+      } catch (e2) {
+        console.warn("UTC APIs failed. Falling back to device time.");
+        return new Date();
       }
     }
+  }
 
-    function getTargetTimeUTC() {
-      const year = new Date().getUTCFullYear();
-      let target = new Date(Date.UTC(year, 11, 1, 18, 15, 0));
-      if (new Date() > target) {
-        target = new Date(Date.UTC(year + 1, 11, 1, 18, 15, 0));
-      }
-      return target;
+  // ===============================
+  // DOM REFERENCES
+  // ===============================
+  const dEl = document.getElementById("days");
+  const hEl = document.getElementById("hours");
+  const mEl = document.getElementById("mins");
+  const sEl = document.getElementById("secs");
+
+  const celebrationSection = document.getElementById("celebration");
+  const celebrationSpans = celebrationSection.querySelectorAll("span");
+
+  // ===============================
+  // CELEBRATION EMOJI PREP
+  // ===============================
+  function prepareCelebrationEmojis() {
+    celebrationSpans.forEach(span => {
+      const sway = Math.random() * 30 - 15;
+      const delay = Math.random() * 5;
+      span.style.setProperty("--sway", sway + "px");
+      span.style.animationDelay = delay + "s";
+    });
+  }
+
+  prepareCelebrationEmojis();
+
+  // ===============================
+  // COUNTDOWN LOGIC
+  // ===============================
+  async function updateCountdown() {
+    if (!targetUTC) return;
+
+    const utcNow = await getAccurateUTC();
+    const diff = targetUTC - utcNow;
+
+    if (diff <= 0) {
+      dEl.textContent = "0";
+      hEl.textContent = "00";
+      mEl.textContent = "00";
+      sEl.textContent = "00";
+
+      celebrationSection.style.visibility = "visible";
+      celebrationSection.style.opacity = "1";
+
+      if (celebrationTimeout) clearTimeout(celebrationTimeout);
+      celebrationTimeout = setTimeout(() => {
+        celebrationSection.style.opacity = "0";
+        celebrationSection.style.visibility = "hidden";
+      }, 10000);
+
+      return;
     }
 
-    const targetUTC = getTargetTimeUTC();
+    const totalSec = Math.floor(diff / 1000);
+    const days = Math.floor(totalSec / 86400);
+    const hours = Math.floor((totalSec % 86400) / 3600);
+    const mins = Math.floor((totalSec % 3600) / 60);
+    const secs = totalSec % 60;
 
-    const dEl = document.getElementById("days");
-    const hEl = document.getElementById("hours");
-    const mEl = document.getElementById("mins");
-    const sEl = document.getElementById("secs");
+    dEl.textContent = days;
+    hEl.textContent = hours.toString().padStart(2, "0");
+    mEl.textContent = mins.toString().padStart(2, "0");
+    sEl.textContent = secs.toString().padStart(2, "0");
 
-    const celebrationSection = document.getElementById("celebration");
-    const celebrationSpans = celebrationSection.querySelectorAll("span");
+    celebrationSection.style.opacity = "0";
+    celebrationSection.style.visibility = "hidden";
+  }
 
-    // Assign random sway and delay to each emoji for natural float effect
-    function prepareCelebrationEmojis() {
-      celebrationSpans.forEach(span => {
-        const swayRange = 15; // pixels sway left-right
-        const sway = (Math.random() * swayRange * 2) - swayRange; // random -15 to 15 px
-        span.style.setProperty('--sway', sway + 'px');
-        const delay = Math.random() * 5; // 0 to 5s delay
-        span.style.animationDelay = delay + 's';
+  // ===============================
+  // CONFETTI LOGIC
+  // ===============================
+  const confettiContainer = document.getElementById("confetti");
+  let backgroundConfettiPieces = [];
+
+  function createConfettiPiece({ left, duration, delay, size, rotate, infinite }) {
+    const span = document.createElement("span");
+    span.className = "confetti-piece";
+    span.style.left = left + "vw";
+    span.style.width = size + "px";
+    span.style.height = size * 1.8 + "px";
+    span.style.backgroundColor = `hsl(${Math.random() * 360}, 90%, 70%)`;
+    span.style.setProperty("--rot", rotate + "deg");
+    span.style.animationDuration = duration + "s";
+    span.style.animationDelay = delay + "s";
+    span.style.animationIterationCount = infinite ? "infinite" : "1";
+    confettiContainer.appendChild(span);
+
+    if (!infinite) {
+      span.addEventListener("animationend", () => span.remove());
+    }
+
+    return span;
+  }
+
+  function createInitialBurst() {
+    for (let i = 0; i < 30; i++) {
+      createConfettiPiece({
+        left: Math.random() * 100,
+        duration: 3 + Math.random() * 2,
+        delay: Math.random() * 2,
+        size: 8 + Math.random() * 6,
+        rotate: Math.random() * 360,
+        infinite: false
       });
     }
+  }
 
-    prepareCelebrationEmojis();
+  function createBackgroundConfetti() {
+    backgroundConfettiPieces.forEach(p => p.remove());
+    backgroundConfettiPieces = [];
 
-    let celebrationTimeout;
+    for (let i = 0; i < 10; i++) {
+      backgroundConfettiPieces.push(
+        createConfettiPiece({
+          left: Math.random() * 100,
+          duration: 15 + Math.random() * 15,
+          delay: -Math.random() * 10,
+          size: 6 + Math.random() * 5,
+          rotate: Math.random() * 360,
+          infinite: true
+        })
+      );
+    }
+  }
 
-    async function updateCountdown() {
-      const utcNow = await getAccurateUTC();
-      const diff = targetUTC - utcNow;
+  function startConfettiFlow() {
+    if (!localStorage.getItem("birthdayConfettiDone")) {
+      createInitialBurst();
+      setTimeout(() => {
+        createBackgroundConfetti();
+        localStorage.setItem("birthdayConfettiDone", "true");
+      }, 10000);
+    } else {
+      createBackgroundConfetti();
+    }
+  }
 
-      if (diff <= 0) {
-        dEl.textContent = "0";
-        hEl.textContent = "00";
-        mEl.textContent = "00";
-        sEl.textContent = "00";
+  startConfettiFlow();
 
-        // Show celebration emojis
-        celebrationSection.style.visibility = 'visible';
-        celebrationSection.style.opacity = '1';
+  // ===============================
+  // LOAD BIRTHDAY DATA
+  // ===============================
+  async function loadBirthdayData() {
+    const name = sessionStorage.getItem("birthdayName");
 
-        // Optional: hide celebration after 10 seconds (change as needed)
-        if (celebrationTimeout) clearTimeout(celebrationTimeout);
-        celebrationTimeout = setTimeout(() => {
-          celebrationSection.style.opacity = '0';
-          celebrationSection.style.visibility = 'hidden';
-        }, 10000);
+    if (!name) {
+      document.body.innerHTML =
+        '<div style="color:yellow;text-align:center;margin-top:50px;">Name not found.</div>';
+      return;
+    }
 
+    try {
+      const res = await fetch("birthdays.json");
+      const data = await res.json();
+
+      const person = data.find(
+        p => p.name.toLowerCase() === name.toLowerCase()
+      );
+
+      if (!person) {
+        document.body.innerHTML =
+          `<div style="color:yellow;text-align:center;margin-top:50px;">${name} not found.</div>`;
         return;
       }
 
-      const totalSec = Math.floor(diff / 1000);
-      const days = Math.floor(totalSec / 86400);
-      const hours = Math.floor((totalSec % 86400) / 3600);
-      const mins = Math.floor((totalSec % 3600) / 60);
-      const secs = totalSec % 60;
+      document.querySelector(".title").textContent =
+        `Happy Birthday ${person.name} 🎂`;
+      document.getElementById('dear-text').textContent = `Dear ${person.name},`;
+document.getElementById('wish-text').textContent = person.wish;
+document.getElementById("signature-text").textContent = person.signature;
 
-      dEl.textContent = days;
-      hEl.textContent = hours.toString().padStart(2, "0");
-      mEl.textContent = mins.toString().padStart(2, "0");
-      sEl.textContent = secs.toString().padStart(2, "0");
+      targetUTC = new Date(person.date);
+      updateCountdown();
 
-      // Hide celebration if countdown not zero
-      celebrationSection.style.opacity = '0';
-      celebrationSection.style.visibility = 'hidden';
+      if (countdownInterval) clearInterval(countdownInterval);
+      countdownInterval = setInterval(updateCountdown, 1000);
+
+    } catch (err) {
+      console.error(err);
+      document.body.innerHTML =
+        '<div style="color:yellow;text-align:center;margin-top:50px;">Error loading data.</div>';
     }
+  }
 
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-
-    // --- Confetti logic ---
-
-    const confettiContainer = document.getElementById('confetti');
-
-    function createConfettiPiece({ leftPercent, duration, delay, size, rotate }) {
-      const span = document.createElement('span');
-      span.classList.add('confetti-piece');
-      span.style.setProperty('--rot', rotate + 'deg');
-      span.style.left = leftPercent + 'vw';
-      span.style.width = size + 'px';
-      span.style.height = size * 1.8 + 'px';
-      span.style.backgroundColor = `hsl(${Math.random() * 360}, 90%, 70%)`;
-      span.style.animationDuration = duration + 's';
-      span.style.animationDelay = delay + 's';
-      span.style.animationName = 'fall';
-      span.style.animationTimingFunction = 'linear';
-      span.style.animationIterationCount = 'infinite';
-      confettiContainer.appendChild(span);
-      return span;
-    }
-
-    function createInitialBurst() {
-      for(let i=0; i < 30; i++) {
-        const left = Math.random() * 100; 
-        const duration = 3 + Math.random() * 2; 
-        const delay = Math.random() * 2; 
-        const size = 8 + Math.random() * 6; 
-        const rotate = Math.random() * 360;
-        const span = document.createElement('span');
-        span.classList.add('confetti-piece');
-        span.style.setProperty('--rot', rotate + 'deg');
-        span.style.left = left + 'vw';
-        span.style.width = size + 'px';
-        span.style.height = size * 1.8 + 'px';
-        span.style.backgroundColor = `hsl(${Math.random() * 360}, 90%, 70%)`;
-        span.style.animationDuration = duration + 's';
-        span.style.animationDelay = delay + 's';
-        span.style.animationName = 'fall';
-        span.style.animationTimingFunction = 'linear';
-        span.style.animationIterationCount = '1';
-        confettiContainer.appendChild(span);
-        span.addEventListener('animationend', () => {
-          span.remove();
-        });
-      }
-    }
-
-    let backgroundConfettiPieces = [];
-    function createBackgroundConfetti() {
-      backgroundConfettiPieces.forEach(p => p.remove());
-      backgroundConfettiPieces = [];
-      for(let i=0; i < 10; i++) {
-        const left = Math.random() * 100; 
-        const duration = 15 + Math.random() * 15; 
-        const delay = Math.random() * duration;
-        const size = 6 + Math.random() * 5;
-        const rotate = Math.random() * 360;
-        const span = createConfettiPiece({
-          leftPercent: left,
-          duration: duration,
-          delay: -delay,
-          size,
-          rotate,
-        });
-        backgroundConfettiPieces.push(span);
-      }
-    }
-
-    function startConfettiFlow() {
-      if (!localStorage.getItem('birthdayConfettiDone')) {
-        createInitialBurst();
-        setTimeout(() => {
-          createBackgroundConfetti();
-          localStorage.setItem('birthdayConfettiDone', 'true');
-        }, 10000);
-      } else {
-        createBackgroundConfetti();
-      }
-    }
-
-    startConfettiFlow();
-
-  </script>
+  loadBirthdayData();
+</script>
 </body>
 </html>
