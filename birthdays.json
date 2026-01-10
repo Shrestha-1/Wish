@@ -1,20 +1,30 @@
 [
   {
-    "name": "Kaju",
+    "name": "kajal bam thQuree",
     "wish": "Even though I’m far away, my heart is right there celebrating you today. May your day shimmer with joy, laughter, and little surprises that make you smile. Here’s a sparkle-filled wish, just for you ✨",
     "date": "2026-01-19T18:15:00Z",
-    "signature": "From someone who’s thinking of you, always 💫"
+    "signature": "From someone who’s thinking of you, always 💫",
+    "countdownMessage": "Kaju, can’t wait to celebrate your special day! 🎉💖"
   },
   {
-    "name": "nanu",
-    "wish": "Happy birthday, nanu! May your year ahead sparkle with happiness and success.",
+    "name": "Nanu",
+    "wish": "Happy birthday, Nanu! May your year ahead sparkle with happiness and success.",
     "date": "2026-12-01T18:15:00Z",
-    "signature": "Cheers to you 🥳"
+    "signature": "Cheers to you 🥳",
+    "countdownMessage": "Counting down the days till your awesome birthday, Nanu! 🥳✨"
   },
   {
-    "name": "Nabin",
+    "name": "Nabin Thapa",
     "wish": "Happy birthday, Nabin! May your year ahead sparkle with happiness and success.",
-    "date": "2026-09-21T00:00:00Z",
-    "signature": "Cheers to you 🥳"
+    "date": "2026-09-20T18:15:00Z",
+    "signature": "Cheers to you 🥳",
+    "countdownMessage": "Nabin, your birthday is almost here! Get ready for fun 🎂🎈"
+  },
+  {
+    "name": "Nirmal Shrestha",
+    "wish": "Happy birthday! Wishing you joy, love, and all the little things that make your day magical.",
+    "date": "2008-01-06T00:00:00Z",
+    "signature": "From your friend 💫",
+    "countdownMessage": "Counting down to your birthday! 🎉"
   }
 ]
