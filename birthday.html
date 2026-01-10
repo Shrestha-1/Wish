@@ -29,9 +29,9 @@
     </section>
 
     <section class="panel">
-      <h2 style="margin: 0 0 10px 0; font-size: 22px; text-align: center;">
-        Countdown to your birthday, miss 💖
-      </h2>
+      <h2 id="countdown-title" style="margin: 0 0 10px 0; font-size: 22px; text-align: center;">
+  Countdown to your birthday
+</h2>
       <div class="countdown">
         <div class="timebox">
           <div class="num" id="days">--</div>
@@ -69,217 +69,172 @@
   </main>
 
   <script>
-  // ===============================
-  // GLOBAL STATE
-  // ===============================
-  let targetUTC = null;
-  let countdownInterval = null;
-  let celebrationTimeout = null;
+ // ===============================
+// CELEBRATION EMOJI PREP
+// ===============================
+const celebrationSection = document.getElementById("celebration");
+const celebrationSpans = celebrationSection.querySelectorAll("span");
 
-  // ===============================
-  // TIME (UTC) LOGIC
-  // ===============================
-  async function getAccurateUTC() {
-    try {
-      const res = await fetch("https://worldtimeapi.org/api/timezone/Etc/UTC");
-      const json = await res.json();
-      return new Date(json.utc_datetime);
-    } catch (e1) {
-      try {
-        const res2 = await fetch("https://timeapi.io/api/Time/current/zone?timeZone=UTC");
-        const json2 = await res2.json();
-        return new Date(json2.dateTime);
-      } catch (e2) {
-        console.warn("UTC APIs failed. Falling back to device time.");
-        return new Date();
-      }
-    }
+function prepareCelebrationEmojis() {
+  celebrationSpans.forEach(span => {
+    const sway = Math.random() * 30 - 15;
+    const delay = Math.random() * 5;
+    span.style.setProperty("--sway", sway + "px");
+    span.style.animationDelay = delay + "s";
+  });
+}
+prepareCelebrationEmojis();
+
+// ===============================
+// CONFETTI LOGIC
+// ===============================
+const confettiContainer = document.getElementById("confetti");
+let backgroundConfettiPieces = [];
+
+function createConfettiPiece({ left, duration, delay, size, rotate, infinite }) {
+  const span = document.createElement("span");
+  span.className = "confetti-piece";
+  span.style.left = left + "vw";
+  span.style.width = size + "px";
+  span.style.height = size * 1.8 + "px";
+  span.style.backgroundColor = `hsl(${Math.random() * 360}, 90%, 70%)`;
+  span.style.setProperty("--rot", rotate + "deg");
+  span.style.animationDuration = duration + "s";
+  span.style.animationDelay = delay + "s";
+  span.style.animationIterationCount = infinite ? "infinite" : "1";
+  confettiContainer.appendChild(span);
+
+  if (!infinite) {
+    span.addEventListener("animationend", () => span.remove());
   }
 
-  // ===============================
-  // DOM REFERENCES
-  // ===============================
-  const dEl = document.getElementById("days");
-  const hEl = document.getElementById("hours");
-  const mEl = document.getElementById("mins");
-  const sEl = document.getElementById("secs");
+  return span;
+}
 
-  const celebrationSection = document.getElementById("celebration");
-  const celebrationSpans = celebrationSection.querySelectorAll("span");
-
-  // ===============================
-  // CELEBRATION EMOJI PREP
-  // ===============================
-  function prepareCelebrationEmojis() {
-    celebrationSpans.forEach(span => {
-      const sway = Math.random() * 30 - 15;
-      const delay = Math.random() * 5;
-      span.style.setProperty("--sway", sway + "px");
-      span.style.animationDelay = delay + "s";
+function createInitialBurst() {
+  for (let i = 0; i < 30; i++) {
+    createConfettiPiece({
+      left: Math.random() * 100,
+      duration: 3 + Math.random() * 2,
+      delay: Math.random() * 2,
+      size: 8 + Math.random() * 6,
+      rotate: Math.random() * 360,
+      infinite: false
     });
   }
+}
 
-  prepareCelebrationEmojis();
+function createBackgroundConfetti() {
+  backgroundConfettiPieces.forEach(p => p.remove());
+  backgroundConfettiPieces = [];
 
-  // ===============================
-  // COUNTDOWN LOGIC
-  // ===============================
-  async function updateCountdown() {
-    if (!targetUTC) return;
-
-    const utcNow = await getAccurateUTC();
-    const diff = targetUTC - utcNow;
-
-    if (diff <= 0) {
-      dEl.textContent = "0";
-      hEl.textContent = "00";
-      mEl.textContent = "00";
-      sEl.textContent = "00";
-
-      celebrationSection.style.visibility = "visible";
-      celebrationSection.style.opacity = "1";
-
-      if (celebrationTimeout) clearTimeout(celebrationTimeout);
-      celebrationTimeout = setTimeout(() => {
-        celebrationSection.style.opacity = "0";
-        celebrationSection.style.visibility = "hidden";
-      }, 10000);
-
-      return;
-    }
-
-    const totalSec = Math.floor(diff / 1000);
-    const days = Math.floor(totalSec / 86400);
-    const hours = Math.floor((totalSec % 86400) / 3600);
-    const mins = Math.floor((totalSec % 3600) / 60);
-    const secs = totalSec % 60;
-
-    dEl.textContent = days;
-    hEl.textContent = hours.toString().padStart(2, "0");
-    mEl.textContent = mins.toString().padStart(2, "0");
-    sEl.textContent = secs.toString().padStart(2, "0");
-
-    celebrationSection.style.opacity = "0";
-    celebrationSection.style.visibility = "hidden";
-  }
-
-  // ===============================
-  // CONFETTI LOGIC
-  // ===============================
-  const confettiContainer = document.getElementById("confetti");
-  let backgroundConfettiPieces = [];
-
-  function createConfettiPiece({ left, duration, delay, size, rotate, infinite }) {
-    const span = document.createElement("span");
-    span.className = "confetti-piece";
-    span.style.left = left + "vw";
-    span.style.width = size + "px";
-    span.style.height = size * 1.8 + "px";
-    span.style.backgroundColor = `hsl(${Math.random() * 360}, 90%, 70%)`;
-    span.style.setProperty("--rot", rotate + "deg");
-    span.style.animationDuration = duration + "s";
-    span.style.animationDelay = delay + "s";
-    span.style.animationIterationCount = infinite ? "infinite" : "1";
-    confettiContainer.appendChild(span);
-
-    if (!infinite) {
-      span.addEventListener("animationend", () => span.remove());
-    }
-
-    return span;
-  }
-
-  function createInitialBurst() {
-    for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 10; i++) {
+    backgroundConfettiPieces.push(
       createConfettiPiece({
         left: Math.random() * 100,
-        duration: 3 + Math.random() * 2,
-        delay: Math.random() * 2,
-        size: 8 + Math.random() * 6,
+        duration: 15 + Math.random() * 15,
+        delay: -Math.random() * 10,
+        size: 6 + Math.random() * 5,
         rotate: Math.random() * 360,
-        infinite: false
-      });
-    }
+        infinite: true
+      })
+    );
   }
+}
 
-  function createBackgroundConfetti() {
-    backgroundConfettiPieces.forEach(p => p.remove());
-    backgroundConfettiPieces = [];
-
-    for (let i = 0; i < 10; i++) {
-      backgroundConfettiPieces.push(
-        createConfettiPiece({
-          left: Math.random() * 100,
-          duration: 15 + Math.random() * 15,
-          delay: -Math.random() * 10,
-          size: 6 + Math.random() * 5,
-          rotate: Math.random() * 360,
-          infinite: true
-        })
-      );
-    }
-  }
-
-  function startConfettiFlow() {
-    if (!localStorage.getItem("birthdayConfettiDone")) {
-      createInitialBurst();
-      setTimeout(() => {
-        createBackgroundConfetti();
-        localStorage.setItem("birthdayConfettiDone", "true");
-      }, 10000);
-    } else {
+function startConfettiFlow() {
+  if (!localStorage.getItem("birthdayConfettiDone")) {
+    createInitialBurst();
+    setTimeout(() => {
       createBackgroundConfetti();
-    }
+      localStorage.setItem("birthdayConfettiDone", "true");
+    }, 10000);
+  } else {
+    createBackgroundConfetti();
+  }
+}
+
+startConfettiFlow();
+
+// ===============================
+// LOAD BIRTHDAY DATA (without countdown)
+// ===============================
+async function loadBirthdayData() {
+  const name = sessionStorage.getItem("birthdayName");
+
+  if (!name) {
+    document.body.innerHTML =
+      '<div style="color:yellow;text-align:center;margin-top:50px;">Name not found.</div>';
+    return;
   }
 
-  startConfettiFlow();
+  try {
+    const res = await fetch("birthdays.json");
+    const data = await res.json();
 
-  // ===============================
-  // LOAD BIRTHDAY DATA
-  // ===============================
-  async function loadBirthdayData() {
-    const name = sessionStorage.getItem("birthdayName");
+    const person = data.find(
+      p => p.name.toLowerCase() === name.toLowerCase()
+    );
 
-    if (!name) {
+    if (!person) {
       document.body.innerHTML =
-        '<div style="color:yellow;text-align:center;margin-top:50px;">Name not found.</div>';
+        `<div style="color:yellow;text-align:center;margin-top:50px;">${name} not found.</div>`;
       return;
     }
 
-    try {
-      const res = await fetch("birthdays.json");
-      const data = await res.json();
+    document.querySelector(".title").textContent =
+      `Happy Birthday ${person.name} 🎂`;
+    document.getElementById('dear-text').textContent = `Dear ${person.name},`;
+    document.getElementById('wish-text').textContent = person.wish;
+    document.getElementById("signature-text").textContent = person.signature;
+    document.getElementById('countdown-title').textContent = person.countdownMessage || "Countdown to your birthday 💖";
 
-      const person = data.find(
-        p => p.name.toLowerCase() === name.toLowerCase()
-      );
-
-      if (!person) {
-        document.body.innerHTML =
-          `<div style="color:yellow;text-align:center;margin-top:50px;">${name} not found.</div>`;
-        return;
-      }
-
-      document.querySelector(".title").textContent =
-        `Happy Birthday ${person.name} 🎂`;
-      document.getElementById('dear-text').textContent = `Dear ${person.name},`;
-document.getElementById('wish-text').textContent = person.wish;
-document.getElementById("signature-text").textContent = person.signature;
-
-      targetUTC = new Date(person.date);
-      updateCountdown();
-
-      if (countdownInterval) clearInterval(countdownInterval);
-      countdownInterval = setInterval(updateCountdown, 1000);
-
-    } catch (err) {
-      console.error(err);
-      document.body.innerHTML =
-        '<div style="color:yellow;text-align:center;margin-top:50px;">Error loading data.</div>';
+    // NOTE: Countdown is now handled in separate JS
+    if (window.loadCountdownFor) {
+      window.loadCountdownFor(person.date); // call separate countdown.js
     }
-  }
 
-  loadBirthdayData();
+  } catch (err) {
+    console.error(err);
+    document.body.innerHTML =
+      '<div style="color:yellow;text-align:center;margin-top:50px;">Error loading data.</div>';
+  }
+}
+
+loadBirthdayData();
+// SECRET ADMIN TRIGGER ON "Minutes"
+let clickCount = 0;
+const requiredClicks = 10;
+const triggerTime = 5000; // reset after 5 seconds of inactivity
+let clickTimer = null;
+
+// Find all elements with class "lab"
+const labElements = document.querySelectorAll(".lab");
+
+// Find the one that has the text "Minutes"
+let minutesLabel = null;
+labElements.forEach(el => {
+  if (el.textContent.trim() === "Minutes") {
+    minutesLabel = el;
+  }
+});
+
+if (minutesLabel) {
+  minutesLabel.addEventListener("click", () => {
+    clickCount++;
+
+    // Reset the counter after inactivity
+    if (clickTimer) clearTimeout(clickTimer);
+    clickTimer = setTimeout(() => clickCount = 0, triggerTime);
+
+    // Trigger admin page
+    if (clickCount >= requiredClicks) {
+      window.location.href = "admin.html";
+    }
+  });
+}
+
 </script>
+<script src="countdown.js"></script>
 </body>
 </html>
