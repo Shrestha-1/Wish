@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upcoming Birthdays</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    margin: 0;
+    padding: 20px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+  }
+
+  .birthday-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .birthday-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transform: translateY(0);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .birthday-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  }
+
+  .birthday-card.upcoming {
+    border: 2px solid #e91e63;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { box-shadow: 0 0 10px rgba(233,30,99,0.5); }
+    50% { box-shadow: 0 0 25px rgba(233,30,99,0.7); }
+    100% { box-shadow: 0 0 10px rgba(233,30,99,0.5); }
+  }
+
+  .name {
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  .date {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 15px;
+  }
+
+  .days-left {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #e91e63;
+    animation: countUp 1.5s ease-out;
+  }
+
+  @keyframes countUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<h1>Upcoming Birthdays</h1>
+<div class="birthday-grid" id="birthdayGrid"></div>
+
+<script>
+async function loadBirthdays() {
+  try {
+    const res = await fetch('birthdays.json');
+    const data = await res.json();
+    const today = new Date();
+
+    const birthdaysWithDays = data.map(person => {
+      const birthDate = new Date(person.date);
+      let nextBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+      if (nextBirthday < today) nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
+      const diffTime = nextBirthday - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return { ...person, nextBirthday, daysLeft: diffDays };
+    });
+
+    birthdaysWithDays.sort((a, b) => a.daysLeft - b.daysLeft);
+
+    const grid = document.getElementById('birthdayGrid');
+    birthdaysWithDays.forEach((b, index) => {
+      const card = document.createElement('div');
+      card.className = 'birthday-card' + (index === 0 ? ' upcoming' : '');
+      card.innerHTML = `
+        <div class="name">${b.name}</div>
+        <div class="date">${b.nextBirthday.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</div>
+        <div class="days-left" data-days="${b.daysLeft}">0</div>
+      `;
+      grid.appendChild(card);
+    });
+
+    // Animate days counter
+    document.querySelectorAll('.days-left').forEach(el => {
+      const target = +el.getAttribute('data-days');
+      let count = 0;
+      const step = Math.ceil(target / 30);
+      const interval = setInterval(() => {
+        count += step;
+        if(count >= target) count = target;
+        el.textContent = count;
+        if(count >= target) clearInterval(interval);
+      }, 30);
+    });
+
+  } catch (err) {
+    console.error(err);
+    document.body.innerHTML = '<p>Error loading birthdays.</p>';
+  }
+}
+
+loadBirthdays();
+</script>
+
+</body>
+</html>
