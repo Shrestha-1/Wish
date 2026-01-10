@@ -151,20 +151,11 @@
 <div id="notificationsContainer"></div>
 
 <script>
-const allowedNames = ["Kaju", "John", "Alice", "Sam", "Lina"];
-const messages = [
-  "Please enter your name ✨",
-  "Hello there! Would you mind telling me your name? 😊",
-  "Pretty please, tell me your name 💖",
-  "Don't leave me guessing! Your name, please 😅",
-  "Oops, did you forget your name? 😜",
-  "You’re keeping me curious… your name, pretty please! 🎀"
-];
-
-let clickCount = 0;
 const submitBtn = document.getElementById("submitBtn");
 const nameInput = document.getElementById("nameInput");
 const notificationsContainer = document.getElementById("notificationsContainer");
+
+let clickCount = 0;
 
 function showNotification(msg, duration = 10000) {
   const notif = document.createElement("div");
@@ -189,31 +180,56 @@ function createConfetti() {
 }
 
 function checkName() {
-  const name = nameInput.value.trim();
-  if (name && allowedNames.includes(name)) {
-    createConfetti();
-    setTimeout(() => window.location.href = "birthday.html", 1500);
-    return;
-  }
+  const name = nameInput.value.trim().toLowerCase();
+
   if (!name) {
+    const messages = [
+      "Please enter your name ✨",
+      "Hello there! Would you mind telling me your name? 😊",
+      "Pretty please, tell me your name 💖",
+      "Don't leave me guessing! Your name, please 😅",
+      "Oops, did you forget your name? 😜",
+      "You’re keeping me curious… your name, pretty please! 🎀"
+    ];
     showNotification(messages[clickCount] || "Please, just tell me your name 😄");
     clickCount++;
-  } else {
-    document.body.innerHTML = `
-      <div class="oops-container">
-        <h1>Oops! 🤔</h1>
-        <p>Hmm… it seems the person who sent you this doesn’t know you yet.</p>
-        <p>Maybe let them know first, then come back! 😉</p>
-        <button onclick="location.reload()">Try Again</button>
-      </div>
-    `;
+    return;
   }
+
+  fetch("birthdays.json")
+    .then(response => response.json())
+    .then(data => {
+      const person = data.find(p => p.name.toLowerCase() === name);
+
+     if (person) {
+    sessionStorage.setItem('birthdayName', person.name); // <- add this line
+    createConfetti();
+    setTimeout(() => {
+      window.location.href = "birthday.html";
+    }, 1500);
+}
+ else {
+        document.body.innerHTML = `
+          <div class="oops-container">
+            <h1>Oops! 🤔</h1>
+            <p>Hmm… it seems the person doesn’t know you yet.</p>
+            <p>Maybe let them know first, then come back! 😉</p>
+            <button onclick="location.reload()">Try Again</button>
+          </div>
+        `;
+      }
+    })
+    .catch(err => {
+      console.error("Error loading birthdays.json:", err);
+      showNotification("Oops! Something went wrong 😅");
+    });
 }
 
+// **THIS IS THE FIX**
 submitBtn.addEventListener("click", checkName);
 nameInput.addEventListener("keydown", e => { if (e.key === "Enter") checkName(); });
 nameInput.focus();
-</script>
 
+</script>
 </body>
 </html>
