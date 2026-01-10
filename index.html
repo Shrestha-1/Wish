@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-  <link rel="icon" type="image/png" href="images/Top.png">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Birthday Surprise 🎉</title>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+<link rel="shortcut icon" href="favicon.ico" type="image/Top.png">
 <style>
   /* Reset & global */
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -179,7 +179,6 @@ function createConfetti() {
     setTimeout(() => conf.remove(), 10000);
   }
 }
-
 function checkName() {
   const name = nameInput.value.trim().toLowerCase();
 
@@ -200,16 +199,19 @@ function checkName() {
   fetch("birthdays.json")
     .then(response => response.json())
     .then(data => {
-      const person = data.find(p => p.name.toLowerCase() === name);
+      // Improved partial matching: check each word of the full name
+      const person = data.find(p => {
+        const words = p.name.toLowerCase().split(" ");
+        return words.some(w => w.startsWith(name));
+      });
 
-     if (person) {
-    sessionStorage.setItem('birthdayName', person.name); // <- add this line
-    createConfetti();
-    setTimeout(() => {
-      window.location.href = "birthday.html";
-    }, 1500);
-}
- else {
+      if (person) {
+        sessionStorage.setItem('birthdayName', person.name);
+        createConfetti();
+        setTimeout(() => {
+          window.location.href = "birthday.html";
+        }, 1500);
+      } else {
         document.body.innerHTML = `
           <div class="oops-container">
             <h1>Oops! 🤔</h1>
